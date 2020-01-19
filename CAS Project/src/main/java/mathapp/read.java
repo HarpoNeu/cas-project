@@ -4,18 +4,29 @@ import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-public class read {
+public class Read {
 
     public static void readFile() throws URISyntaxException, IOException {
 
         URL path = ClassLoader.getSystemResource("Questions.txt");
         File file = new File(path.toURI());
-        BufferedReader questions = new BufferedReader(new FileReader(file));
+        BufferedReader br = new BufferedReader(new FileReader(file));
         
-        String st; 
-        while ((st = questions.readLine()) != null) {
-          System.out.println(st); 
+        String line; 
+        String completeFile = "";
+
+        while ((line = br.readLine()) != null) {
+             completeFile = completeFile + "\n" + line;
         } 
+        String questions[] = completeFile.split(";");
+        String qLines[][] = new String[questions.length][];
+
+        for(int a = 0; a < questions.length; a ++)
+        {
+            qLines[a] = questions[a].split("\n");
+        }
+        System.out.println(qLines[1][2]);
+
 
     }
 

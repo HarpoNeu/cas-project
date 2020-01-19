@@ -6,8 +6,10 @@ public class Main
     public static void main( String[] args )
     {
         try{
-            read.readFile();
+            Read.readFile();
+            
         } catch(Exception e) {
+            System.out.println(e.toString());
             System.out.println("failure");
         }
         
