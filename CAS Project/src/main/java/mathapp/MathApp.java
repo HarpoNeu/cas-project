@@ -4,6 +4,7 @@ import javafx.application.*;
 import javafx.stage.*;
 import javafx.scene.*;
 
+
 public class MathApp extends Application
 {
     public void start(Stage primaryStage)
@@ -14,9 +15,9 @@ public class MathApp extends Application
         primaryStage.setTitle("Math App");
         primaryStage.show();
     }
-
     public static void main(String args[])
     {
         launch(args);
     }
+
 }
