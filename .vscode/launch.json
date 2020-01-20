@@ -16,13 +16,6 @@
             "request": "launch",
             "mainClass": "mathapp.Main",
             "projectName": "CASProject"
-        },
-        {
-            "type": "java",
-            "name": "Debug (Launch)-MathApp<CASProject>",
-            "request": "launch",
-            "mainClass": "mathapp.MathApp",
-            "projectName": "CASProject"
         }
     ]
 }
