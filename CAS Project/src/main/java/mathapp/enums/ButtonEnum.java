@@ -1,0 +1,9 @@
+package mathapp.enums;
+
+public enum ButtonEnum
+{
+    BUTTON_NOT_PRESSED, 
+    BUTTON_SCENE_MAIN_MENU_BTN_QUESTION, 
+    BUTTON_SCENE_QUESTION_BTN_MAIN_MENU,
+    BUTTON_SCENE_QUESTION_BTN_QUIT
+}
