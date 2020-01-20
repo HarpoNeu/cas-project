@@ -6,6 +6,7 @@ import javafx.stage.*;
 import mathapp.enums.*;
 import mathapp.scene.*;
 
+
 public class MathApp extends Application
 {
     private static boolean running;
@@ -101,9 +102,9 @@ public class MathApp extends Application
     {
         buttonPressedEnum = buttonPressed;
     }
-
     public static void main(String args[])
     {
         launch(args);
     }
+
 }
