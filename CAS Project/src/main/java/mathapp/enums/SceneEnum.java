@@ -2,6 +2,6 @@ package mathapp.enums;
 
 public enum SceneEnum
 {
-    MAIN_MENU_SCENE, 
-    QUESTION_SCENE
+    SCENE_MAIN_MENU, 
+    SCENE_QUESTION
 } 

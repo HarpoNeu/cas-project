@@ -1,17 +1,33 @@
 package mathapp.scene;
 
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
 import mathapp.MathApp;
+import mathapp.enums.ButtonEnum;
+import mathapp.enums.SceneEnum;
 
 public class MainMenuScene extends MathScene
 {
+    private Button toQuestionBtn;
+    private Button quitBtn;
+    private HBox btnBox;
+
     protected void initScene()
     {
-        Button toQuestionSceneBtn = new Button("Go to Question Scene");
-        mainGroup.getChildren().add(toQuestionSceneBtn);
+        sceneEnum = SceneEnum.SCENE_MAIN_MENU;
 
-        toQuestionSceneBtn.setOnAction(evt -> {
-            MathApp.setButtonPressedEnum(mathapp.enums.ButtonEnum.BUTTON_SCENE_MAIN_MENU_BTN_QUESTION);
+        toQuestionBtn = new Button("Go to Question Scene");
+        quitBtn = new Button("Quit");
+
+        btnBox = new HBox(25, toQuestionBtn, quitBtn);
+
+        mainGroup.getChildren().add(btnBox);
+
+        toQuestionBtn.setOnAction(evt -> {
+            MathApp.setButtonPressedEnum(ButtonEnum.BUTTON_TO_QUESTION);
+        });
+        quitBtn.setOnAction(evt -> {
+            MathApp.setButtonPressedEnum(ButtonEnum.BUTTON_QUIT);
         });
     }
 }

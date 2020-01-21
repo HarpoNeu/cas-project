@@ -1,6 +1,7 @@
 package mathapp;
 
-import mathapp.enums.*;
+import mathapp.enums.ButtonEnum;
+import mathapp.enums.SceneEnum;
 
 public class MainThread implements Runnable
 {
@@ -13,13 +14,13 @@ public class MainThread implements Runnable
             {
                 case BUTTON_NOT_PRESSED:
                     break;
-                case BUTTON_SCENE_MAIN_MENU_BTN_QUESTION:
-                    MathApp.setCurSceneEnum(SceneEnum.QUESTION_SCENE);
+                case BUTTON_TO_QUESTION:
+                    MathApp.setCurSceneEnum(SceneEnum.SCENE_QUESTION);
                     break;
-                case BUTTON_SCENE_QUESTION_BTN_MAIN_MENU:
-                    MathApp.setCurSceneEnum(SceneEnum.MAIN_MENU_SCENE);
+                case BUTTON_TO_MAIN_MENU:
+                    MathApp.setCurSceneEnum(SceneEnum.SCENE_MAIN_MENU);
                     break;
-                case BUTTON_SCENE_QUESTION_BTN_QUIT:
+                case BUTTON_QUIT:
                     MathApp.setRunning(false);
                     break;
             }

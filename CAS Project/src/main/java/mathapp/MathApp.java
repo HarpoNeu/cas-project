@@ -1,20 +1,25 @@
 package mathapp;
 
-import javafx.animation.*;
-import javafx.application.*;
-import javafx.stage.*;
-import mathapp.enums.*;
-import mathapp.scene.*;
+import javafx.animation.AnimationTimer;
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.stage.Stage;
+import mathapp.enums.ButtonEnum;
+import mathapp.enums.SceneEnum;
+import mathapp.scene.MainMenuScene;
+import mathapp.scene.MathScene;
+import mathapp.scene.QuestionScene;
 
 
 public class MathApp extends Application
 {
     private static boolean running;
 
-    private static SceneEnum curSceneEnum;
+    private static volatile SceneEnum currentSceneEnum;
     private static volatile ButtonEnum buttonPressedEnum;
 
-    private static boolean sceneEnumChanged;
+    private static MathScene currentScene;
 
     private Stage stage;
 
@@ -23,15 +28,15 @@ public class MathApp extends Application
     public void start(Stage primaryStage)
     {
         running = true;
+        stage = primaryStage;
 
-        curSceneEnum = SceneEnum.QUESTION_SCENE;
+        currentSceneEnum = SceneEnum.SCENE_MAIN_MENU;
         buttonPressedEnum = ButtonEnum.BUTTON_NOT_PRESSED;
 
-        sceneEnumChanged = true;
+        setScene(currentSceneEnum);
 
         initFrameTimer();
 
-        stage = primaryStage;
         stage.setTitle("Math App");
         stage.centerOnScreen();
         stage.show();
@@ -47,19 +52,9 @@ public class MathApp extends Application
             @Override
             public void handle(long now) 
             {
-                if (sceneEnumChanged)
+                if (currentScene.getSceneEnum() != currentSceneEnum)
                 {
-                    sceneEnumChanged = false;
-
-                    switch (curSceneEnum)
-                    {
-                        case MAIN_MENU_SCENE:
-                            stage.setScene(new MainMenuScene().getScene());
-                            break;
-                        case QUESTION_SCENE:
-                            stage.setScene(new QuestionScene().getScene());
-                            break;
-                    }
+                    setScene(currentSceneEnum);
                 }
 
                 if (!running)
@@ -70,6 +65,21 @@ public class MathApp extends Application
         };
 
         frameTimer.start();
+    }
+
+    public void setScene(SceneEnum newSceneEnum)
+    {
+        switch (newSceneEnum)
+        {
+            case SCENE_MAIN_MENU:
+                currentScene = new MainMenuScene();
+                break;
+            case SCENE_QUESTION:
+                currentScene = new QuestionScene();
+                break;
+        }
+
+        stage.setScene(currentScene.getScene());
     }
 
     public static boolean isRunning()
@@ -84,13 +94,12 @@ public class MathApp extends Application
 
     public static SceneEnum getCurSceneEnum()
     {
-        return curSceneEnum;
+        return currentSceneEnum;
     }
 
     public static void setCurSceneEnum(SceneEnum newSceneEnum)
     {
-        curSceneEnum = newSceneEnum;
-        sceneEnumChanged = true;
+        currentSceneEnum = newSceneEnum;
     }
 
     public static ButtonEnum getButtonPressedEnum()
