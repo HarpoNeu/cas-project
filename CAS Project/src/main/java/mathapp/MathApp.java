@@ -4,7 +4,6 @@ import javafx.application.*;
 import javafx.stage.*;
 import javafx.scene.*;
 
-
 public class MathApp extends Application
 {
     public void start(Stage primaryStage)
