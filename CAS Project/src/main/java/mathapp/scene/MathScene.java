@@ -3,9 +3,10 @@ package mathapp.scene;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import mathapp.enums.SceneEnum;
+import mathapp.enums.SubmissionEnum;
 
 public abstract class MathScene
-{
+{   
     protected Scene scene;
     protected Group mainGroup;
 
@@ -30,4 +31,6 @@ public abstract class MathScene
     }
 
     protected abstract void initScene();
+
+    public abstract void resolveSubmission(SubmissionEnum submissionToResolve);
 }

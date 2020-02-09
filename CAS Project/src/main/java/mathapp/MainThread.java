@@ -2,9 +2,18 @@ package mathapp;
 
 import mathapp.enums.ButtonEnum;
 import mathapp.enums.SceneEnum;
+import mathapp.enums.SubmissionEnum;
+import mathapp.scene.QuizScene;
 
 public class MainThread implements Runnable
 {
+    private static String submittedAnswer;
+
+    public MainThread()
+    {
+        submittedAnswer = "";
+    }
+
     @Override
     public void run()
     {
@@ -26,6 +35,35 @@ public class MainThread implements Runnable
             }
 
             MathApp.setButtonPressedEnum(ButtonEnum.BUTTON_NOT_PRESSED);
+
+            if (!submittedAnswer.equals(""))
+            {
+                if (submittedAnswer.equals("yes"))
+                {
+                    MathApp.setCurrentSubmissionEnum(SubmissionEnum.ANSWER_CORRECT);
+                }
+                else if (submittedAnswer.equals("ye"))
+                {
+                    MathApp.setCurrentSubmissionEnum(SubmissionEnum.ANSWER_CLOSE);
+                }
+                else
+                {
+                    MathApp.setCurrentSubmissionEnum(SubmissionEnum.ANSWER_INCORRECT);
+                }
+
+                submittedAnswer = "";
+            }
+            
         }
+    }
+
+    public static String getSubmittedAnswer()
+    {
+        return submittedAnswer;
+    }
+
+    public static void setSubmittedAnswer(String answerSubmitted)
+    {
+        submittedAnswer = answerSubmitted;
     }
 }

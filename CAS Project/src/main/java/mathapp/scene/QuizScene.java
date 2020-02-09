@@ -11,11 +11,13 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import mathapp.MainThread;
 import mathapp.MathApp;
 import mathapp.enums.ButtonEnum;
 import mathapp.enums.SceneEnum;
+import mathapp.enums.SubmissionEnum;
 
-public class QuestionScene extends MathScene
+public class QuizScene extends MathScene
 {
     private final double MIN_WIDTH = 800;
     private final double MIN_HEIGHT = 800;
@@ -72,5 +74,42 @@ public class QuestionScene extends MathScene
         toMainMenuBtn.setOnAction(evt -> {
             MathApp.setButtonPressedEnum(ButtonEnum.BUTTON_TO_MAIN_MENU);
         });
+        answerTextField.setOnAction(evt -> {
+            MainThread.setSubmittedAnswer(answerTextField.getText());
+            answerTextField.setText("");
+        });
+    }
+
+    public void resolveSubmission(SubmissionEnum submissionToResolve)
+    {
+        switch (submissionToResolve)
+        {
+            case ANSWER_CORRECT:
+                resolveAnswerCorrect();
+                break;
+            case ANSWER_INCORRECT:
+                resolveAnswerIncorrect();
+                break;
+            case ANSWER_CLOSE:
+                resolveAnswerClose();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void resolveAnswerCorrect()
+    {
+        System.out.println("Answer Correct");
+    }
+
+    private void resolveAnswerIncorrect()
+    {
+        System.out.println("Answer Incorrect");
+    }
+
+    private void resolveAnswerClose()
+    {
+        System.out.println("Answer Close");
     }
 }

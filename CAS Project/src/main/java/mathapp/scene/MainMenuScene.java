@@ -5,6 +5,7 @@ import javafx.scene.layout.HBox;
 import mathapp.MathApp;
 import mathapp.enums.ButtonEnum;
 import mathapp.enums.SceneEnum;
+import mathapp.enums.SubmissionEnum;
 
 public class MainMenuScene extends MathScene
 {
@@ -29,5 +30,10 @@ public class MainMenuScene extends MathScene
         quitBtn.setOnAction(evt -> {
             MathApp.setButtonPressedEnum(ButtonEnum.BUTTON_QUIT);
         });
+    }
+
+    public void resolveSubmission(SubmissionEnum submissionToResolve)
+    {
+        
     }
 }
