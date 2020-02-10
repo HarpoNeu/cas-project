@@ -35,6 +35,7 @@ public class Read {
             qLines[a] = questions[a].split("\n");
             if(qLines[a][3] == difficulty)
             {
+                
                 //allow these questions to be displayed.
                 //put them into an array
             }
