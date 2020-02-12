@@ -3,7 +3,6 @@ package mathapp;
 import mathapp.enums.ButtonEnum;
 import mathapp.enums.SceneEnum;
 import mathapp.enums.SubmissionEnum;
-import mathapp.scene.QuizScene;
 
 public class MainThread implements Runnable
 {
