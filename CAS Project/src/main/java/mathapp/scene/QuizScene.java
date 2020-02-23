@@ -8,6 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -26,6 +27,7 @@ public class QuizScene extends MathScene
     private Font textFont;
 
     private Text questionText;
+    private Text answerText;
 
     private TextField answerTextField;
 
@@ -33,19 +35,30 @@ public class QuizScene extends MathScene
 
     private Button toMainMenuBtn;
 
+    private static String answerString;
+    private static boolean answerSubmitted;
+
     protected void initScene()
     {
         sceneEnum = SceneEnum.SCENE_QUESTION;
+
+        answerString = "";
+        answerSubmitted = false;
 
         textFont = new Font("Arial", 18); 
 
         questionText = new Text("What is my name?");
         questionText.setTextAlignment(TextAlignment.JUSTIFY);
+        questionText.setFont(textFont);
+
+        answerText = new Text("No Answer Submitted");
+        answerText.setTextAlignment(TextAlignment.JUSTIFY);
+        answerText.setFont(textFont);
 
         answerTextField = new TextField();
         answerTextField.setMaxSize(MIN_WIDTH / 2, MIN_HEIGHT / 2);
 
-        centreVBox = new VBox(20, questionText, answerTextField);
+        centreVBox = new VBox(20, questionText, answerTextField, answerText);
         centreVBox.maxWidthProperty().bind(scene.widthProperty().subtract(centreVBox.getLayoutX()));
         centreVBox.maxHeightProperty().bind(scene.heightProperty().subtract(centreVBox.getLayoutY()));
 
@@ -75,8 +88,15 @@ public class QuizScene extends MathScene
             MathApp.setButtonPressedEnum(ButtonEnum.BUTTON_TO_MAIN_MENU);
         });
         answerTextField.setOnAction(evt -> {
-            MainThread.setSubmittedAnswer(answerTextField.getText());
-            answerTextField.setText("");
+            if (!answerSubmitted)
+            {
+                synchronized(answerString)
+                {
+                    answerSubmitted = true;
+                    answerString = answerTextField.getText();
+                }
+                answerTextField.setText("");
+            }
         });
     }
 
@@ -100,16 +120,31 @@ public class QuizScene extends MathScene
 
     private void resolveAnswerCorrect()
     {
-        System.out.println("Answer Correct");
+        answerText.setText("Answer Correct");
+        answerText.setFill(Color.GREEN);
     }
 
     private void resolveAnswerIncorrect()
     {
-        System.out.println("Answer Incorrect");
+        answerText.setText("Answer Incorrect");
+        answerText.setFill(Color.RED);
     }
 
     private void resolveAnswerClose()
     {
-        System.out.println("Answer Close");
+        answerText.setText("Answer Close");
+        answerText.setFill(Color.DARKKHAKI);
+    }
+
+    public static boolean getAnswerSubmitted()
+    {
+        boolean prevAnswerSubmitted = answerSubmitted;
+        answerSubmitted = false;
+        return prevAnswerSubmitted;
+    }
+
+    public static String getAnswerString()
+    {
+        return answerString;
     }
 }
