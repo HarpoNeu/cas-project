@@ -19,7 +19,7 @@ public class Read {
         String answer = input.nextLine();
         String line; 
         String completeFile = "";
-        String difficulty = "2"; // will allow user to input a difficulty between 1-10 to get questions within that difficulty
+        String difficulty = "1"; // will allow user to input a difficulty between 1-10 to get questions within that difficulty
 
         Boolean correct = false;
 
@@ -28,14 +28,14 @@ public class Read {
         } 
         String questions[] = completeFile.split(";");
         String qLines[][] = new String[questions.length][];
-
+        
         
         for(int a = 0; a < questions.length; a++)
         {
             qLines[a] = questions[a].split("\n");
             if(qLines[a][3] == difficulty)
             {
-                
+                System.out.println(questions[a]);
                 //allow these questions to be displayed.
                 //put them into an array
             }
