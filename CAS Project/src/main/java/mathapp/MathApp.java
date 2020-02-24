@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 import mathapp.enums.ButtonEnum;
 import mathapp.enums.SceneEnum;
 import mathapp.enums.SubmissionEnum;
+import mathapp.scene.GraphScene;
 import mathapp.scene.MainMenuScene;
 import mathapp.scene.MathScene;
 import mathapp.scene.QuizScene;
@@ -84,6 +85,9 @@ public class MathApp extends Application
                 break;
             case SCENE_QUESTION:
                 currentScene = new QuizScene();
+                break;
+            case SCENE_GRAPH:
+                currentScene = new GraphScene();
                 break;
         }
 

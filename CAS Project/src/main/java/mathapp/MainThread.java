@@ -26,6 +26,10 @@ public class MainThread implements Runnable
                     MathApp.setCurSceneEnum(SceneEnum.SCENE_MAIN_MENU);
                     MathApp.setButtonPressedEnum(ButtonEnum.BUTTON_NOT_PRESSED);
                     break;
+                case BUTTON_TEMP:
+                    MathApp.setCurSceneEnum(SceneEnum.SCENE_GRAPH);
+                    MathApp.setButtonPressedEnum(ButtonEnum.BUTTON_NOT_PRESSED);
+                    break;
                 case BUTTON_QUIT:
                     MathApp.setRunning(false);
                     break;

@@ -12,7 +12,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import mathapp.MainThread;
 import mathapp.MathApp;
 import mathapp.enums.ButtonEnum;
 import mathapp.enums.SceneEnum;
@@ -34,6 +33,8 @@ public class QuizScene extends MathScene
     private VBox centreVBox;
 
     private Button toMainMenuBtn;
+
+    private AnchorPane mainPane;
 
     private static String answerString;
     private static boolean answerSubmitted;
@@ -71,7 +72,7 @@ public class QuizScene extends MathScene
         toMainMenuBtn.setMinHeight  (10);
         toMainMenuBtn.setPrefHeight (25);
 
-        AnchorPane mainPane = new AnchorPane(centreVBox, toMainMenuBtn);
+        mainPane = new AnchorPane(centreVBox, toMainMenuBtn);
         mainPane.setMaxSize(2000, 2000);
         mainPane.setMinSize(800, 600);
 
