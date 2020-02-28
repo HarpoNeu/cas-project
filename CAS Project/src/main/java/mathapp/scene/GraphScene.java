@@ -3,11 +3,17 @@ package mathapp.scene;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeType;
+import javafx.scene.text.Text;
 import mathapp.enums.SceneEnum;
 import mathapp.enums.SubmissionEnum;
 import mathapp.scene.MathScene;
@@ -16,6 +22,9 @@ public class GraphScene extends MathScene {
 
     private final int BEG_WIDTH = 800;
     private final int BEG_HEIGHT = 800;
+
+    private int horSpace;
+    private int verSpace;
 
     private double mouseXInit;
     private double mouseYInit;
@@ -30,19 +39,37 @@ public class GraphScene extends MathScene {
         mouseXInit = 0;
         mouseYInit = 0;
 
-        Rectangle upLeft = new Rectangle(0, 0, Color.RED);
-        Rectangle upRight = new Rectangle(0, 0, Color.BLUE);
-        Rectangle downLeft = new Rectangle(0, 0, Color.GREEN);
-        Rectangle downRight = new Rectangle(0, 0, Color.YELLOW);
+        horSpace = 375 / 5;
+        verSpace = 375 / 5;
 
         mainPane = new Pane();
         mainPane.setPrefWidth(BEG_WIDTH);
         mainPane.setPrefHeight(BEG_HEIGHT);
 
+        Rectangle upLeft = new Rectangle(0, 0, Color.TRANSPARENT);
+        Rectangle upRight = new Rectangle(0, 0, Color.TRANSPARENT);
+        Rectangle downLeft = new Rectangle(0, 0, Color.TRANSPARENT);
+        Rectangle downRight = new Rectangle(0, 0, Color.TRANSPARENT);
+
+        upLeft.setStrokeType(StrokeType.INSIDE);
+        upLeft.setStroke(Color.BLACK);
+        upRight.setStrokeType(StrokeType.INSIDE);
+        upRight.setStroke(Color.BLACK);
+        downLeft.setStrokeType(StrokeType.INSIDE);
+        downLeft.setStroke(Color.BLACK);
+        downRight.setStrokeType(StrokeType.INSIDE);
+        downRight.setStroke(Color.BLACK);
+
         DoubleProperty centreX = new SimpleDoubleProperty((double) BEG_WIDTH / 2);
         DoubleProperty centreY = new SimpleDoubleProperty((double) BEG_HEIGHT / 2);
         centreXInit = centreX.get();
         centreYInit = centreY.get();
+
+        IntegerProperty centreXOffset = new SimpleIntegerProperty(5);
+        centreXOffset.bind(centreX.subtract(mainPane.widthProperty()).divide(horSpace));
+
+        IntegerProperty centreYOffset = new SimpleIntegerProperty(5);
+        centreYOffset.bind(centreY.subtract(mainPane.heightProperty()).divide(verSpace));
 
         NumberBinding leftXBind = Bindings.min(centreX, new SimpleDoubleProperty(0));
         NumberBinding rightXBind = Bindings.max(centreX, new SimpleDoubleProperty(0));
@@ -75,6 +102,46 @@ public class GraphScene extends MathScene {
         downRight.heightProperty().bind(downHeightBind);
 
         mainPane.getChildren().addAll(upLeft, upRight, downLeft, downRight);
+
+        Text numberHor[] = new Text[11];
+
+        for (int i = 0; i < numberHor.length; i++)
+        {
+            numberHor[i] = new Text(Integer.toString(5 - i));
+
+            NumberBinding textXBindSpec = Bindings.subtract(centreX, 
+                Bindings.multiply(new SimpleDoubleProperty(horSpace), centreXOffset.add(i)));
+            
+            numberHor[i].xProperty().bind(textXBindSpec);
+            numberHor[i].yProperty().bind(centreY.subtract(5));
+
+            StringProperty textProperty = new SimpleStringProperty();
+            textProperty.bind(centreXOffset.add(i).multiply(-1).asString());
+
+            numberHor[i].textProperty().bind(textProperty);
+        }
+
+        mainPane.getChildren().addAll(numberHor);
+
+        Text numberVer[] = new Text[11];
+
+        for (int i = 0; i < numberVer.length; i++)
+        {
+            numberVer[i] = new Text(Integer.toString(5 - i));
+
+            NumberBinding textYBindSpec = Bindings.subtract(centreY, 
+                Bindings.multiply(new SimpleDoubleProperty(verSpace), centreYOffset.add(i)));
+            
+            numberVer[i].xProperty().bind(centreX.add(5));
+            numberVer[i].yProperty().bind(textYBindSpec);
+
+            StringProperty textProperty = new SimpleStringProperty();
+            textProperty.bind(centreYOffset.add(i).asString());
+
+            numberVer[i].textProperty().bind(textProperty);
+        }
+
+        mainPane.getChildren().addAll(numberVer);
 
         mainPane.widthProperty().addListener(lst -> {
             leftWidthBind.setValue(Math.max(Math.min(centreX.get(), mainPane.widthProperty().get()), 0));

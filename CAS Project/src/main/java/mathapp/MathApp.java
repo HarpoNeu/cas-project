@@ -32,7 +32,8 @@ public class MathApp extends Application
         running = true;
         stage = primaryStage;
 
-        currentSceneEnum = SceneEnum.SCENE_MAIN_MENU;
+        //currentSceneEnum = SceneEnum.SCENE_MAIN_MENU;
+        currentSceneEnum = SceneEnum.SCENE_GRAPH;
         buttonPressedEnum = ButtonEnum.BUTTON_NOT_PRESSED;
         currentSubmissionEnum = SubmissionEnum.NO_SUBMISSION;
 
