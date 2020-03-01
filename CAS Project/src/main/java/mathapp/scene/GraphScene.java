@@ -23,13 +23,21 @@ public class GraphScene extends MathScene {
     private final int BEG_WIDTH = 800;
     private final int BEG_HEIGHT = 800;
 
-    private int horSpace;
-    private int verSpace;
+    private DoubleProperty centreX;
+    private DoubleProperty centreY;
+    private IntegerProperty centreXOffset;
+    private IntegerProperty centreYOffset;
+
+    private DoubleProperty horSpace;
+    private DoubleProperty verSpace;
 
     private double mouseXInit;
     private double mouseYInit;
     private double centreXInit;
     private double centreYInit;
+
+    private NumberText numberHor[];
+    private NumberText numberVer[];
 
     private Pane mainPane;
 
@@ -39,8 +47,8 @@ public class GraphScene extends MathScene {
         mouseXInit = 0;
         mouseYInit = 0;
 
-        horSpace = 375 / 5;
-        verSpace = 375 / 5;
+        horSpace = new SimpleDoubleProperty(375 / 5);
+        verSpace = new SimpleDoubleProperty(375 / 5);
 
         mainPane = new Pane();
         mainPane.setPrefWidth(BEG_WIDTH);
@@ -60,15 +68,15 @@ public class GraphScene extends MathScene {
         downRight.setStrokeType(StrokeType.INSIDE);
         downRight.setStroke(Color.BLACK);
 
-        DoubleProperty centreX = new SimpleDoubleProperty((double) BEG_WIDTH / 2);
-        DoubleProperty centreY = new SimpleDoubleProperty((double) BEG_HEIGHT / 2);
+        centreX = new SimpleDoubleProperty((double) BEG_WIDTH / 2);
+        centreY = new SimpleDoubleProperty((double) BEG_HEIGHT / 2);
         centreXInit = centreX.get();
         centreYInit = centreY.get();
 
-        IntegerProperty centreXOffset = new SimpleIntegerProperty(5);
+        centreXOffset = new SimpleIntegerProperty(5);
         centreXOffset.bind(centreX.subtract(mainPane.widthProperty()).divide(horSpace));
 
-        IntegerProperty centreYOffset = new SimpleIntegerProperty(5);
+        centreYOffset = new SimpleIntegerProperty(5);
         centreYOffset.bind(centreY.subtract(mainPane.heightProperty()).divide(verSpace));
 
         NumberBinding leftXBind = Bindings.min(centreX, new SimpleDoubleProperty(0));
@@ -103,45 +111,14 @@ public class GraphScene extends MathScene {
 
         mainPane.getChildren().addAll(upLeft, upRight, downLeft, downRight);
 
-        Text numberHor[] = new Text[11];
+        createText();
 
-        for (int i = 0; i < numberHor.length; i++)
-        {
-            numberHor[i] = new Text(Integer.toString(5 - i));
+        Text zeroText = new Text("0");
 
-            NumberBinding textXBindSpec = Bindings.subtract(centreX, 
-                Bindings.multiply(new SimpleDoubleProperty(horSpace), centreXOffset.add(i)));
-            
-            numberHor[i].xProperty().bind(textXBindSpec);
-            numberHor[i].yProperty().bind(centreY.subtract(5));
+        zeroText.xProperty().bind(centreX.add(5));
+        zeroText.yProperty().bind(centreY.subtract(5));
 
-            StringProperty textProperty = new SimpleStringProperty();
-            textProperty.bind(centreXOffset.add(i).multiply(-1).asString());
-
-            numberHor[i].textProperty().bind(textProperty);
-        }
-
-        mainPane.getChildren().addAll(numberHor);
-
-        Text numberVer[] = new Text[11];
-
-        for (int i = 0; i < numberVer.length; i++)
-        {
-            numberVer[i] = new Text(Integer.toString(5 - i));
-
-            NumberBinding textYBindSpec = Bindings.subtract(centreY, 
-                Bindings.multiply(new SimpleDoubleProperty(verSpace), centreYOffset.add(i)));
-            
-            numberVer[i].xProperty().bind(centreX.add(5));
-            numberVer[i].yProperty().bind(textYBindSpec);
-
-            StringProperty textProperty = new SimpleStringProperty();
-            textProperty.bind(centreYOffset.add(i).asString());
-
-            numberVer[i].textProperty().bind(textProperty);
-        }
-
-        mainPane.getChildren().addAll(numberVer);
+        mainPane.getChildren().add(zeroText);
 
         mainPane.widthProperty().addListener(lst -> {
             leftWidthBind.setValue(Math.max(Math.min(centreX.get(), mainPane.widthProperty().get()), 0));
@@ -173,6 +150,13 @@ public class GraphScene extends MathScene {
             upHeightBind.setValue(Math.max(Math.min(centreY.get(), mainPane.heightProperty().get()), 0));
             downHeightBind.setValue(Math.max(Math.min(mainPane.heightProperty().get() - centreY.get(), mainPane.heightProperty().get()), 0));
         });
+
+        mainPane.setOnScroll(evt -> {
+            horSpace.setValue(Math.max(1, horSpace.get() + evt.getDeltaY()));
+            verSpace.setValue(Math.max(1, verSpace.get() + evt.getDeltaY()));
+
+            createText();
+        });
         
         scene = new Scene(mainPane);
     }
@@ -180,5 +164,80 @@ public class GraphScene extends MathScene {
     public void resolveSubmission(SubmissionEnum submissionToResolve)
     {
 
+    }
+
+    private void createText()
+    {
+        try
+        {
+            mainPane.getChildren().removeAll(numberHor);
+            mainPane.getChildren().removeAll(numberVer);
+        } catch (NullPointerException e)
+        {
+
+        }
+
+        int horCount = mainPane.widthProperty().divide(horSpace).intValue() + 1;
+        numberHor = new NumberText[horCount];
+
+        for (int i = 0; i < numberHor.length; i++)
+        {
+            numberHor[i] = new NumberText();
+
+            NumberBinding textXBindSpec = Bindings.subtract(centreX, 
+                Bindings.multiply(horSpace, centreXOffset.add(i)));
+            
+            numberHor[i].xProperty().bind(textXBindSpec);
+            numberHor[i].yProperty().bind(centreY.subtract(5));
+
+            numberHor[i].numberProperty.bind(centreXOffset.add(i).multiply(-1));
+        }
+
+        int verCount = mainPane.heightProperty().divide(verSpace).intValue() + 1;
+        numberVer = new NumberText[verCount];
+
+        for (int i = 0; i < numberVer.length; i++)
+        {
+            numberVer[i] = new NumberText();
+
+            NumberBinding textYBindSpec = Bindings.subtract(centreY, 
+                Bindings.multiply(verSpace, centreYOffset.add(i)));
+            
+            numberVer[i].xProperty().bind(centreX.add(5));
+            numberVer[i].yProperty().bind(textYBindSpec);
+
+            numberVer[i].numberProperty.bind(centreYOffset.add(i));
+        }
+
+        mainPane.getChildren().addAll(numberHor);
+        mainPane.getChildren().addAll(numberVer);
+    }
+
+    private class NumberText extends Text
+    {
+        public IntegerProperty numberProperty;
+        public StringProperty textProperty;
+
+        public NumberText()
+        {
+            super("");
+
+            numberProperty = new SimpleIntegerProperty(0);
+            textProperty = new SimpleStringProperty("");
+
+            numberProperty.addListener(lst -> {
+                if (numberProperty.get() == 0)
+                {
+                    this.setVisible(false);
+                }
+                else
+                {
+                    this.setVisible(true);
+                }
+            });
+
+            textProperty.bind(numberProperty.asString());
+            textProperty().bind(textProperty);
+        }
     }
 }
